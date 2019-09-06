@@ -327,9 +327,7 @@ class Deployment(object):
         # WA for bug: https://bugzilla.redhat.com/show_bug.cgi?id=1747388
         cluster = CephCluster()
         wa_cmd = (
-            "for POOL in ocsci-cephfs-metadata ocsci-cephfs-data0; do for PGN"
-            " in pg_num pgp_num; do ceph osd pool set ${POOL} ${PGN} 100;"
-            "done; done"
+            "ceph mgr module enable pg_autoscaler"
         )
         logger.info("Applying WA for BZ: 1747388")
         out = cluster.toolbox.exec_bash_cmd_on_pod(wa_cmd)
