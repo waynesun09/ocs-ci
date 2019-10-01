@@ -67,7 +67,9 @@ class OCP(object):
         self._data = self.get()
         return self._data
 
-    def exec_oc_cmd(self, command, out_yaml_format=True, secrets=None, **kwargs):
+    def exec_oc_cmd(
+        self, command, out_yaml_format=True, secrets=None, timeout=600, **kwargs
+    ):
         """
         Executing 'oc' command
 
@@ -82,6 +84,8 @@ class OCP(object):
                 This kwarg is popped in order to not interfere with
                 subprocess.run(**kwargs)
 
+            timeout (int): timeout for the oc_cmd, defaults to 600 seconds
+
         Returns:
             dict: Dictionary represents a returned yaml file
         """
@@ -94,7 +98,7 @@ class OCP(object):
             oc_cmd += f"--kubeconfig {kubeconfig} "
 
         oc_cmd += command
-        out = run_cmd(cmd=oc_cmd, secrets=secrets, **kwargs)
+        out = run_cmd(cmd=oc_cmd, secrets=secrets, timeout, **kwargs)
 
         try:
             if out.startswith('hints = '):

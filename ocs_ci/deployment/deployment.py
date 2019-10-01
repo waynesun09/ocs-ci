@@ -192,7 +192,7 @@ class Deployment(object):
         logger.info("Deployment of OCS via OCS operator")
         olm_manifest = self.get_olm_manifest()
         self.label_and_taint_nodes()
-        run_cmd(f"oc create -f {olm_manifest}")
+        run_cmd(f"oc create -f {olm_manifest}", timeout=2400)
         # wait for package manifest
         package_manifest = PackageManifest(
             resource_name=defaults.OCS_OPERATOR_NAME
@@ -231,7 +231,7 @@ class Deployment(object):
         templating.dump_data_to_temp_yaml(
             cluster_data, cluster_data_yaml.name
         )
-        run_cmd(f"oc create -f {cluster_data_yaml.name}")
+        run_cmd(f"oc create -f {cluster_data_yaml.name}", timeout=2400)
 
     def deploy_ocs(self):
         """
